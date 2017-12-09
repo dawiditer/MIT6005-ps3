@@ -1,4 +1,4 @@
-// Generated from Expression.g4 by ANTLR 4.7
+// Generated from src/expressivo/parser/Expression.g4 by ANTLR 4.7
 
 package expressivo.parser;
 // Do not edit this .java file! Edit the grammar in Expression.g4 and re-run Antlr.
@@ -116,6 +116,11 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitRoot(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitRoot(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final RootContext root() throws RecognitionException {
@@ -158,6 +163,11 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitStat(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitStat(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 
 	public final StatContext stat() throws RecognitionException {
@@ -195,7 +205,6 @@ public class ExpressionParser extends Parser {
 		}
 	}
 	public static class AddContext extends ExprContext {
-		public Token op;
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -212,6 +221,11 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitAdd(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitAdd(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class BracketsContext extends ExprContext {
 		public ExprContext expr() {
@@ -226,9 +240,13 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitBrackets(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitBrackets(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class MultContext extends ExprContext {
-		public Token op;
 		public List<ExprContext> expr() {
 			return getRuleContexts(ExprContext.class);
 		}
@@ -245,6 +263,11 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitMult(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitMult(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class NumContext extends ExprContext {
 		public TerminalNode NUM() { return getToken(ExpressionParser.NUM, 0); }
@@ -257,6 +280,11 @@ public class ExpressionParser extends Parser {
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitNum(this);
 		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitNum(this);
+			else return visitor.visitChildren(this);
+		}
 	}
 	public static class IdContext extends ExprContext {
 		public TerminalNode ID() { return getToken(ExpressionParser.ID, 0); }
@@ -268,6 +296,11 @@ public class ExpressionParser extends Parser {
 		@Override
 		public void exitRule(ParseTreeListener listener) {
 			if ( listener instanceof ExpressionListener ) ((ExpressionListener)listener).exitId(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof ExpressionVisitor ) return ((ExpressionVisitor<? extends T>)visitor).visitId(this);
+			else return visitor.visitChildren(this);
 		}
 	}
 
@@ -343,7 +376,7 @@ public class ExpressionParser extends Parser {
 						setState(21);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(22);
-						((MultContext)_localctx).op = match(MULT);
+						match(MULT);
 						setState(23);
 						expr(6);
 						}
@@ -355,7 +388,7 @@ public class ExpressionParser extends Parser {
 						setState(24);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(25);
-						((AddContext)_localctx).op = match(ADD);
+						match(ADD);
 						setState(26);
 						expr(5);
 						}

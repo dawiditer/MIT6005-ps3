@@ -8,8 +8,8 @@ import Configuration;
 root : stat EOF ;
 stat : expr NEWLINE ;
 expr :
-     expr op=MULT expr   #Mult
-     | expr op=ADD  expr #Add
+     expr MULT expr      #Mult
+     | expr ADD  expr    #Add
      | ID                #Id
      | NUM               #Num
      | '(' expr ')'      #Brackets
