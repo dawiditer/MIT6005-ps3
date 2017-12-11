@@ -6,7 +6,7 @@ grammar Expression;
 import Configuration;
 
 root : stat EOF ;
-stat : expr NEWLINE ;
+stat : expr ;
 expr :
      expr MULT expr      #Mult
      | expr ADD  expr    #Add
