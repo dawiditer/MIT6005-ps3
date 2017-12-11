@@ -72,6 +72,9 @@ public class Addition implements Expression {
      *   - The expressions contain the same variables, numbers, and operators;
      *   - those variables, numbers, and operators are in the same order, read left-to-right;
      *   - and they are grouped in the same way.
+     * However, two addition objects are not equal if having different groupings with 
+     * the same mathematical meaning. For example, 
+     *     (3 + 4) + 5 and 3 + (4 + 5) are NOT equal.
      * @param thatObject Object to compare equality with
      * @return true if two addition expressions are equal
      */

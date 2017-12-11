@@ -14,11 +14,19 @@ import org.junit.Test;
  * Tests for the concrete variants of Expression
  */
 public class ExpressionTest {
-    // Testing Strategy:
-    // Partition the input as follows:
-    //  For all variants:
-    //    Value, Variable, Addition, Multiplication
-    //  Input partitions are:
+    // Testing Strategy for Expression.parse()
+    //  Partition the input as follows:
+    //   For operators + and * :
+    //     one operator,
+    //     multiple operators of the same type,
+    //     multiple operators of different types.
+    //   include inputs with grouping
+    //
+    // Testing Strategy for the Expression variants:
+    //  Partition the input as follows:
+    //   For all variants:
+    //     Value, Variable, Addition, Multiplication
+    //   Input partitions are:
     //    variant.add(otherVariant)
     //      this variant included as otherVariant  
     //    variant.multiply(otherVariant)
@@ -39,6 +47,92 @@ public class ExpressionTest {
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
+    }
+    
+    //Tests for Expression.parse()
+    @Test
+    // covers single addition expression
+    public void testParse_SingleAdd() {
+        String input = "2 + x \n";
+        Expression expected = 
+                new Addition(new Value("2"), new Variable("x"));
+        Expression wrongOrder = 
+                new Addition(new Variable("x"), new Value("2"));
+        Expression parsed = Expression.parse(input);
+        
+        assertNotEquals("Expected non-null expression", 
+                null, parsed);
+        assertNotEquals("Expected correct order of elements", 
+                wrongOrder, parsed);
+        assertEquals("Expected correct parse",
+                expected, parsed);
+    }
+    @Test
+    // covers multiple additions
+    public void testParse_MultipleAdds() {
+        String input = "(x + x + y) \n";
+        Expression expected = new Addition(
+                        new Addition(new Variable("x"), new Variable("x")),
+                        new Variable("y"));
+        Expression parsed = Expression.parse(input);
+   
+        assertNotEquals("Expected non-null expression", 
+                null, parsed);
+        assertEquals("Expected correct parse",
+                expected, parsed);
+    }
+    @Test
+    // covers single multiplication expression
+    public void testParse_SingleMult() {
+        String input = "x*y \n";
+        Expression expected =
+                new Multiplication(new Variable("x"), new Variable("y"));
+        Expression wrongOrder =
+                new Multiplication(new Variable("y"), new Variable("x"));
+        Expression parsed = Expression.parse(input);
+        
+        assertNotEquals("Expected non-null expression", 
+                null, parsed);
+        assertNotEquals("Expected correct order of elements", 
+                wrongOrder, parsed);
+        assertEquals("Expected correct parse",
+                expected, parsed);
+    }
+    @Test
+    // covers multiple multiplication expressions
+    public void testParse_MultipleMults() {
+        String input = "x*2*x \n";
+        Variable x = new Variable("x");
+        Value num = new Value("2");
+        Expression expected = 
+                new Multiplication(
+                        new Multiplication(x, num), x);
+        Expression parsed = Expression.parse(input);
+        
+        assertNotEquals("Expected non-null expression", 
+                null, parsed);
+        assertEquals("Expected correct parse",
+                expected, parsed);
+    }
+    @Test
+    // covers addition, multiplication and grouping
+    public void testParse_AddMult() {
+        String input = "(x + (2.12*x))*y \n";
+        Variable x = new Variable("x");
+        Variable y = new Variable("y");
+        Value num = new Value("2.12");
+        Multiplication group1 =
+                new Multiplication(num, x);
+        Addition group2 =
+                new Addition(x, group1);
+        Expression expected = 
+                new Multiplication(group2, y);
+        Expression parsed = Expression.parse(input);
+        
+        assertNotEquals("Expected non-null expression", 
+                null, parsed);
+        assertEquals("Expected correct parse",
+                expected, parsed);
     }
     
     // Tests for variant.add(otherVariant)
@@ -599,4 +693,5 @@ public class ExpressionTest {
         assertEquals("Expected equal products to have equal hashcodes", 
                 mult1.hashCode(), mult2.hashCode());
     }
+    
 }

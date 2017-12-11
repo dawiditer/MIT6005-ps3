@@ -4,6 +4,14 @@
 package expressivo;
 
 import java.util.List;
+import expressivo.parser.ExpressionLexer;
+import expressivo.parser.ExpressionMainVisitor;
+import expressivo.parser.ExpressionParser;
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.antlr.v4.runtime.tree.ParseTree;
 /**
  * An immutable data type representing a polynomial expression of:
  *   + and *
@@ -29,7 +37,26 @@ public interface Expression {
      * @throws IllegalArgumentException if the expression is invalid
      */
     public static Expression parse(String input) {
-        throw new RuntimeException("unimplemented");
+        assert input != null && input != "";
+        try {
+            CharStream inputStream = CharStreams.fromString(input);
+            ExpressionLexer lexer = new ExpressionLexer(inputStream);
+            lexer.reportErrorsAsExceptions();
+            
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
+            ExpressionParser parser = new ExpressionParser(tokens);
+            parser.reportErrorsAsExceptions();
+            
+            parser.setBuildParseTree(true);
+            ParseTree parseTree = parser.root();
+            
+            ExpressionMainVisitor exprVisitor = new ExpressionMainVisitor();
+            Expression expr = exprVisitor.visit(parseTree);
+            
+            return expr;
+        } catch (ParseCancellationException e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
     }
     /**
      * Returns the sum expression of this and another expression
