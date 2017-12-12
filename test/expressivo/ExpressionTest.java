@@ -749,6 +749,7 @@ public class ExpressionTest {
                 new Addition(new Value("0"), new Value("0")),
                 new Value("1"));
         
+        System.out.println(deriv);
         assertNotEquals("Expected non-null expression", 
                 null, deriv);
         assertEquals("Expected derivative of an addition", 
@@ -761,7 +762,7 @@ public class ExpressionTest {
         Value one = new Value("1");
         Multiplication multExpr = new Multiplication(
                 new Multiplication(x,x), 
-                new Variable("x"));
+                x);
         Expression deriv = multExpr.differentiate("x");
                 
         Multiplication multGroup1 = new Multiplication(x, one);    // x*1

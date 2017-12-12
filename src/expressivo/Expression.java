@@ -77,17 +77,18 @@ public interface Expression {
      */
     public boolean isAddition();
     /**
+     * Produces an expression with the derivative of this expression 
+     * with respect to an input variable
+     * @param variable case-sensitive letters-only nonempty string used to differentiate.
+     * @return the derivative of this expression with respect
+     *         to variable. Must be a valid expression equal to the derivative, 
+     *         but doesn't need to be in simplest or canonical form.
+     */
+    public Expression differentiate(String variable);
+    /**
      * @return a parsable representation of this expression, such that
      * for all e:Expression, e.equals(Expression.parse(e.toString())).
      */
-    /**
-     * Produces an expression with the derivative of this expression 
-     * with respect to an input variable
-     * @param variable case-sensitive letters-only string used to produce the derivative.
-     * @return the derivative of this expression with respect
-     *         to variable.
-     */
-    public Expression differentiate(String variable);
     @Override public String toString();
     /**
      * @param thatObject any object

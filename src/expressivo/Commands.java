@@ -24,7 +24,13 @@ public class Commands {
      * @throws IllegalArgumentException if the expression or variable is invalid
      */
     public static String differentiate(String expression, String variable) {
-        throw new RuntimeException("unimplemented");
+        assert expression != null && expression != "";
+        assert variable != null && variable != "";
+        
+        Expression expr = Expression.parse(expression);
+        Expression deriv = expr.differentiate(variable);
+        
+        return deriv.toString();
     }
     
     /**
