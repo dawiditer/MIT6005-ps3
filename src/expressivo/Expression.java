@@ -3,7 +3,6 @@
  */
 package expressivo;
 
-import java.util.List;
 import expressivo.parser.ExpressionLexer;
 import expressivo.parser.ExpressionMainVisitor;
 import expressivo.parser.ExpressionParser;
@@ -27,7 +26,7 @@ public interface Expression {
     
     // Datatype definition:
     //   Expression = Value(num:String)
-    //                + Variable(name:String)
+    //                + Variable(id:String)
     //                + Addition(left:Expression, right:Expression)
     //                + Multiplication(left:Expression, right:Expression)
     /**
@@ -81,6 +80,14 @@ public interface Expression {
      * @return a parsable representation of this expression, such that
      * for all e:Expression, e.equals(Expression.parse(e.toString())).
      */
+    /**
+     * Produces an expression with the derivative of this expression 
+     * with respect to an input variable
+     * @param variable case-sensitive letters-only string used to produce the derivative.
+     * @return the derivative of this expression with respect
+     *         to variable.
+     */
+    public Expression differentiate(String variable);
     @Override public String toString();
     /**
      * @param thatObject any object
@@ -88,8 +95,7 @@ public interface Expression {
      * Expressions, as defined in the PS3 handout.
      */
     @Override
-    public boolean equals(Object thatObject);
-    
+    public boolean equals(Object thatObject);  
     /**
      * @return hash code value consistent with the equals() definition of structural
      * equality, such that for all e1,e2:Expression,

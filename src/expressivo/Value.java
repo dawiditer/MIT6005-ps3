@@ -39,6 +39,10 @@ public class Value implements Expression {
     @Override public boolean isAddition() {
         return false;
     }
+    @Override public Expression differentiate(String variable) {
+        assert variable != null && variable != "";
+        return new Value("0");
+    }
     @Override public String toString() {
         return this.num;
     }

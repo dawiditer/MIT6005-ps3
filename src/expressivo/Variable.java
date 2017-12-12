@@ -39,6 +39,13 @@ public class Variable implements Expression {
     @Override public boolean isAddition() {
         return false;
     }
+    @Override public Expression differentiate(String variable) {
+        assert variable != null && variable != "";
+        // dx/dx = 1
+        // dc/dx = 0 for all variables, c != x
+        return this.equals(new Variable(variable)) ? 
+                new Value("1") : new Value("0");
+    }
     @Override public String toString() {
         return this.id;
     }

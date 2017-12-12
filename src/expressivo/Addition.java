@@ -39,6 +39,14 @@ public class Addition implements Expression {
     @Override public boolean isAddition() {
         return true;
     }
+    @Override public Expression differentiate(String variable) {
+        assert variable != null && variable != "";
+        // d(u + v)/dx = du/dx + dv/dx
+        // where u + v = this, u = left, v = right
+        return new Addition(
+                this.left.differentiate(variable),
+                this.right.differentiate(variable));
+    }
     /**
      * Returns a string representation of this expression
      * A single space exists between each operand and 

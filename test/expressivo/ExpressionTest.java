@@ -34,6 +34,12 @@ public class ExpressionTest {
     //      - transitive
     //    variant.hashCode()
     //    variant.isAddition()
+    //
+    // Testing Strategy for variant.differentiate(inputVariable)
+    //  Partition the input as follows:
+    //   - all variants as input
+    //   - Addition and Multiplication variants to include multiple variables
+    //    
     // Full Cartesian Coverage of partitions
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -700,5 +706,75 @@ public class ExpressionTest {
         
         assertFalse("Expected multiplication not to be an addition", 
                 multExpr.isAddition());
-    }  
+    }
+ // Tests for variant.differentiate(inputVariable)
+    @Test
+    // covers value
+    public void testDifferentiate_Value() {
+        Value valueExpr = new Value("2.1");
+        Expression deriv = valueExpr.differentiate("x");
+        Expression expected = new Value("0");
+        
+        assertNotEquals("Expected non-null expression", 
+                null, deriv);
+        assertEquals("Expected derivative of a constant to be 0", 
+                expected, deriv);
+    }
+    @Test
+    // covers variable
+    public void testDifferentiate_Variable() {
+        Variable valueExpr = new Variable("foo");
+        Expression deriv1 = valueExpr.differentiate("foo");
+        Expression deriv2 = valueExpr.differentiate("bar");
+        Expression expected1 = new Value("1");
+        Expression expected2 = new Value("0");
+        
+        assertNotEquals("Expected non-null expression", 
+                null, deriv1);
+        assertNotEquals("Expected non-null expression", 
+                null, deriv2);
+        assertEquals("Expected derivative with repect to itself to be 1", 
+                expected1, deriv1);
+        assertEquals("Expected derivative with repect to another variable to be 0", 
+                expected2, deriv2);
+    }
+    @Test
+    // covers addition
+    public void testDifferentiate_Addition() {
+        Addition addExpr = new Addition(
+                new Addition(new Variable("x"), new Value("3.142")), 
+                new Variable("y"));
+        Expression deriv = addExpr.differentiate("y");
+        Expression expected = new Addition(
+                new Addition(new Value("0"), new Value("0")),
+                new Value("1"));
+        
+        assertNotEquals("Expected non-null expression", 
+                null, deriv);
+        assertEquals("Expected derivative of an addition", 
+                expected, deriv);
+    }
+    @Test
+    // covers multiplication
+    public void testDifferentiate_Multiplication() {
+        Variable x = new Variable("x");
+        Value one = new Value("1");
+        Multiplication multExpr = new Multiplication(
+                new Multiplication(x,x), 
+                new Variable("x"));
+        Expression deriv = multExpr.differentiate("x");
+                
+        Multiplication multGroup1 = new Multiplication(x, one);    // x*1
+        Multiplication multGroup2 = new Multiplication( 
+                x, new Addition(multGroup1, multGroup1));          // x*(x*1 + x*1)
+        Multiplication multGroup3 = new Multiplication(
+                x, multGroup1);                                    // x*x*1
+        Expression expected = new Addition(multGroup2, multGroup3);// x*(x*1 + x*1) + x*x*1
+        
+        assertNotEquals("Expected non-null expression", 
+                null, expected);
+        assertEquals("Expected derivative of a multiplication", 
+                expected, deriv);
+        
+    }
 }

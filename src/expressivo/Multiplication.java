@@ -35,6 +35,14 @@ public class Multiplication implements Expression{
     @Override public Expression multiply(Expression e) {
         return new Multiplication(this, e);
     }
+    @Override public Expression differentiate(String variable) {
+        assert variable != null && variable != "";
+        // d(u*v)/dx = v*(du/dx) + u*(dv/dx)
+        // where u*v = this, u = left, v = right
+        return new Addition(
+                new Multiplication(this.right, this.left.differentiate(variable)),
+                new Multiplication(this.left, this.right.differentiate(variable)));
+    }
     @Override public boolean isAddition() {
         return false;
     }
