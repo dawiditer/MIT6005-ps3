@@ -41,9 +41,8 @@ public class ExpressionTest {
     //      - symmetric
     //      - transitive
     //    variant.hashCode()
-    //  
+    //
     // Full Cartesian Coverage of partitions
-    
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
@@ -53,7 +52,7 @@ public class ExpressionTest {
     @Test
     // covers single addition expression
     public void testParse_SingleAdd() {
-        String input = "2 + x \n";
+        String input = "2 + x";
         Expression expected = 
                 new Addition(new Value("2"), new Variable("x"));
         Expression wrongOrder = 
@@ -70,7 +69,7 @@ public class ExpressionTest {
     @Test
     // covers multiple additions
     public void testParse_MultipleAdds() {
-        String input = "(x + x + y) \n";
+        String input = "(x + x + y)";
         Expression expected = new Addition(
                         new Addition(new Variable("x"), new Variable("x")),
                         new Variable("y"));
@@ -84,7 +83,7 @@ public class ExpressionTest {
     @Test
     // covers single multiplication expression
     public void testParse_SingleMult() {
-        String input = "x*y \n";
+        String input = "x*y";
         Expression expected =
                 new Multiplication(new Variable("x"), new Variable("y"));
         Expression wrongOrder =
@@ -101,7 +100,7 @@ public class ExpressionTest {
     @Test
     // covers multiple multiplication expressions
     public void testParse_MultipleMults() {
-        String input = "x*2*x \n";
+        String input = "x*2*x";
         Variable x = new Variable("x");
         Value num = new Value("2");
         Expression expected = 
@@ -117,7 +116,7 @@ public class ExpressionTest {
     @Test
     // covers addition, multiplication and grouping
     public void testParse_AddMult() {
-        String input = "(x + (2.12*x))*y \n";
+        String input = "(x + (2.12*x))*y";
         Variable x = new Variable("x");
         Variable y = new Variable("y");
         Value num = new Value("2.12");
