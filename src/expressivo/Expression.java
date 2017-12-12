@@ -36,6 +36,7 @@ public interface Expression {
      * @return expression AST for the input
      * @throws IllegalArgumentException if the expression is invalid
      */
+    // TODO: 'human-readable' error messages
     public static Expression parse(String input) {
         assert input != null && input != "";
         try {
@@ -95,7 +96,7 @@ public interface Expression {
     /**
      * @return a parsable representation of this expression, such that
      * for all e:Expression, e.equals(Expression.parse(e.toString())).
-     */    
+     */
     @Override public String toString();
     /**
      * @param thatObject any object
@@ -111,8 +112,5 @@ public interface Expression {
      *     e1.equals(e2) implies e1.hashCode() == e2.hashCode()
      */
     @Override
-    public int hashCode();
-    
-    // TODO more instance methods
-    
+    public int hashCode();    
 }

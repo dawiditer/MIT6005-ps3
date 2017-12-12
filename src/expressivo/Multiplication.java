@@ -37,11 +37,11 @@ public class Multiplication implements Expression{
     @Override public Expression multiply(Expression e) {
         return new Multiplication(this, e);
     }
-    @Override public boolean isAddition() {
-        return false;
-    }
     @Override public List<Expression> getSubExpr() {
         return Arrays.asList(this.left, this.right);
+    }
+    @Override public boolean isAddition() {
+        return false;
     }
     /**
      * Returns a string representation of this expression
@@ -81,12 +81,8 @@ public class Multiplication implements Expression{
             return false;
         }
         Multiplication thatMult = (Multiplication) thatObject;
-        final List<Expression> thatSubExpr = thatMult.getSubExpr();
-        final Expression thatLeft = thatSubExpr.get(0);
-        final Expression thatRight = thatSubExpr.get(1);
         
-        return this.left.equals(thatLeft)
-                && this.right.equals(thatRight);
+        return this.toString().equals(thatMult.toString());
     }
     @Override public int hashCode() {
         final int prime = 37;

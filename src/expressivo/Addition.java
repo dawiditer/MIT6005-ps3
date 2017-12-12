@@ -60,21 +60,15 @@ public class Addition implements Expression {
                + " + "
                + this.right.toString();
     }
-    // TODO: 
-    /* According to this implementation, 
-     *  (3 + 4) + 5 != 3 + (4 + 5)
-     * A spec that recognizes mathematical meaning
-     * is preferred
-     */
     /**
      * Checks if an object is equal to this addition expression
      * Two expressions are equal if and only if: 
      *   - The expressions contain the same variables, numbers, and operators;
      *   - those variables, numbers, and operators are in the same order, read left-to-right;
      *   - and they are grouped in the same way.
-     * However, two addition objects are not equal if having different groupings with 
+     * Two addition objects are equal if having different groupings with 
      * the same mathematical meaning. For example, 
-     *     (3 + 4) + 5 and 3 + (4 + 5) are NOT equal.
+     *     (3 + 4) + 5 and 3 + (4 + 5) are equal.
      * @param thatObject Object to compare equality with
      * @return true if two addition expressions are equal
      */
@@ -86,12 +80,8 @@ public class Addition implements Expression {
             return false;
         }
         Addition thatAdd = (Addition) thatObject;
-        final List<Expression> thatSubExpr = thatAdd.getSubExpr();
-        final Expression thatLeft = thatSubExpr.get(0);
-        final Expression thatRight = thatSubExpr.get(1);
         
-        return this.left.equals(thatLeft)
-                && this.right.equals(thatRight);
+        return this.toString().equals(thatAdd.toString());
     }
     @Override public int hashCode() {
         final int prime = 37;

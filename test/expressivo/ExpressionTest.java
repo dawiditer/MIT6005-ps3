@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-// TODO: include tests for Expression.parse() and variant.isAddition()
+// TODO: include tests for variant.isAddition()
 /**
  * Tests for the concrete variants of Expression
  */
@@ -41,7 +41,6 @@ public class ExpressionTest {
     //      - symmetric
     //      - transitive
     //    variant.hashCode()
-    //
     // Full Cartesian Coverage of partitions
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -53,11 +52,11 @@ public class ExpressionTest {
     // covers single addition expression
     public void testParse_SingleAdd() {
         String input = "2 + x";
+        Expression parsed = Expression.parse(input);
         Expression expected = 
                 new Addition(new Value("2"), new Variable("x"));
         Expression wrongOrder = 
                 new Addition(new Variable("x"), new Value("2"));
-        Expression parsed = Expression.parse(input);
         
         assertNotEquals("Expected non-null expression", 
                 null, parsed);
@@ -70,10 +69,10 @@ public class ExpressionTest {
     // covers multiple additions
     public void testParse_MultipleAdds() {
         String input = "(x + x + y)";
-        Expression expected = new Addition(
-                        new Addition(new Variable("x"), new Variable("x")),
-                        new Variable("y"));
         Expression parsed = Expression.parse(input);
+        Expression expected = new Addition(
+                new Addition(new Variable("x"), new Variable("x")),
+                new Variable("y"));
    
         assertNotEquals("Expected non-null expression", 
                 null, parsed);
@@ -84,11 +83,11 @@ public class ExpressionTest {
     // covers single multiplication expression
     public void testParse_SingleMult() {
         String input = "x*y";
+        Expression parsed = Expression.parse(input);
         Expression expected =
                 new Multiplication(new Variable("x"), new Variable("y"));
         Expression wrongOrder =
                 new Multiplication(new Variable("y"), new Variable("x"));
-        Expression parsed = Expression.parse(input);
         
         assertNotEquals("Expected non-null expression", 
                 null, parsed);
@@ -101,12 +100,12 @@ public class ExpressionTest {
     // covers multiple multiplication expressions
     public void testParse_MultipleMults() {
         String input = "x*2*x";
+        Expression parsed = Expression.parse(input);
         Variable x = new Variable("x");
         Value num = new Value("2");
         Expression expected = 
                 new Multiplication(
                         new Multiplication(x, num), x);
-        Expression parsed = Expression.parse(input);
         
         assertNotEquals("Expected non-null expression", 
                 null, parsed);
@@ -117,6 +116,7 @@ public class ExpressionTest {
     // covers addition, multiplication and grouping
     public void testParse_AddMult() {
         String input = "(x + (2.12*x))*y";
+        Expression parsed = Expression.parse(input);
         Variable x = new Variable("x");
         Variable y = new Variable("y");
         Value num = new Value("2.12");
@@ -126,7 +126,6 @@ public class ExpressionTest {
                 new Addition(x, group1);
         Expression expected = 
                 new Multiplication(group2, y);
-        Expression parsed = Expression.parse(input);
         
         assertNotEquals("Expected non-null expression", 
                 null, parsed);
@@ -154,8 +153,8 @@ public class ExpressionTest {
     public void testAdd_Variables() {
         // x + x
         Variable varExpr = new Variable("x");        
-        Expression expected = new Addition(varExpr, varExpr);
         Expression addition = varExpr.add(varExpr);
+        Expression expected = new Addition(varExpr, varExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, varExpr);
@@ -170,8 +169,8 @@ public class ExpressionTest {
         Variable varExpr = new Variable("x");
         Value valueExpr = new Value("2.2");
         
-        Expression expected = new Addition(valueExpr, varExpr);
         Expression addition = valueExpr.add(varExpr);
+        Expression expected = new Addition(valueExpr, varExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, valueExpr);
@@ -187,8 +186,8 @@ public class ExpressionTest {
         Variable right = new Variable("y");
         Addition sumExpr = new Addition(varExpr, right);
         
-        Expression expected = new Addition(sumExpr, varExpr);
         Expression addition = sumExpr.add(varExpr);
+        Expression expected = new Addition(sumExpr, varExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, sumExpr);
@@ -204,8 +203,8 @@ public class ExpressionTest {
         Variable right = new Variable("y");
         Multiplication multExpr = new Multiplication(varExpr, right);
         
-        Expression expected = new Addition(varExpr, multExpr);
         Expression addition = varExpr.add(multExpr);
+        Expression expected = new Addition(varExpr, multExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, multExpr);
@@ -222,8 +221,8 @@ public class ExpressionTest {
         Addition rightSumExpr = 
                 new Addition(new Value("1"), new Variable("y"));
         
-        Expression expected = new Addition(leftSumExpr, rightSumExpr);
         Expression addition = leftSumExpr.add(rightSumExpr);
+        Expression expected = new Addition(leftSumExpr, rightSumExpr);
         
         assertNotEquals("Expected non-null", null, leftSumExpr);
         assertNotEquals("Expected non-null", null, rightSumExpr);
@@ -240,8 +239,8 @@ public class ExpressionTest {
         Multiplication multExpr = 
                 new Multiplication(new Variable("x"), new Variable("y"));
         
-        Expression expected = new Addition(sumExpr, multExpr);
         Expression addition = sumExpr.add(multExpr);
+        Expression expected = new Addition(sumExpr, multExpr);
         
         assertNotEquals("Expected non-null", null, multExpr);
         assertNotEquals("Expected non-null", null, sumExpr);
@@ -258,8 +257,8 @@ public class ExpressionTest {
         Multiplication multExpr2 = 
                 new Multiplication(new Variable("x"), new Variable("y"));
         
-        Expression expected = new Addition(multExpr1, multExpr2);
         Expression addition = multExpr1.add(multExpr2);
+        Expression expected = new Addition(multExpr1, multExpr2);
         
         assertNotEquals("Expected non-null", null, multExpr1);
         assertNotEquals("Expected non-null", null, multExpr2);
@@ -275,8 +274,8 @@ public class ExpressionTest {
         // 2.2*2.2
         Value valueExpr = new Value("2.2");
         
-        Expression expected = new Multiplication(valueExpr, valueExpr);
         Expression product = valueExpr.multiply(valueExpr);
+        Expression expected = new Multiplication(valueExpr, valueExpr);
         
         assertNotEquals("Expected non-null", null, valueExpr);
         assertNotEquals("Expected non-null", null, expected);
@@ -288,8 +287,8 @@ public class ExpressionTest {
     public void testMultiply_Variables() {
         // x*x
         Variable varExpr = new Variable("x");        
-        Expression expected = new Multiplication(varExpr, varExpr);
         Expression product = varExpr.multiply(varExpr);
+        Expression expected = new Multiplication(varExpr, varExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, varExpr);
@@ -304,8 +303,8 @@ public class ExpressionTest {
         Variable varExpr = new Variable("x");
         Value valueExpr = new Value("2.2");
         
-        Expression expected = new Multiplication(varExpr, valueExpr);
         Expression product = varExpr.multiply(valueExpr);
+        Expression expected = new Multiplication(varExpr, valueExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, valueExpr);
@@ -321,8 +320,8 @@ public class ExpressionTest {
         Addition sumExpr = 
                 new Addition(varExpr, new Variable("y"));
         
-        Expression expected = new Multiplication(sumExpr, varExpr);
         Expression product = sumExpr.multiply(varExpr);
+        Expression expected = new Multiplication(sumExpr, varExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, sumExpr);
@@ -338,8 +337,8 @@ public class ExpressionTest {
         Multiplication multExpr =
                 new Multiplication(varExpr, new Variable("y"));
         
-        Expression expected = new Multiplication(varExpr, multExpr);
         Expression product = varExpr.multiply(multExpr);
+        Expression expected = new Multiplication(varExpr, multExpr);
         
         assertNotEquals("Expected non-null", null, varExpr);
         assertNotEquals("Expected non-null", null, multExpr);
@@ -356,9 +355,9 @@ public class ExpressionTest {
         Addition rightSumExpr = 
                 new Addition(new Variable("x"), new Variable("y"));
         
+        Expression product = leftSumExpr.multiply(rightSumExpr);
         Expression expected =
                 new Multiplication(leftSumExpr, rightSumExpr);
-        Expression product = leftSumExpr.multiply(rightSumExpr);
         
         assertNotEquals("Expected non-null", null, leftSumExpr);
         assertNotEquals("Expected non-null", null, rightSumExpr);
@@ -375,9 +374,9 @@ public class ExpressionTest {
         Multiplication multExpr = 
                 new Multiplication(new Variable("x"), new Variable("y"));
         
+        Expression product = sumExpr.multiply(multExpr);
         Expression expected = 
                 new Multiplication(sumExpr, multExpr);
-        Expression product = sumExpr.multiply(multExpr);
         
         assertNotEquals("Expected non-null", null, multExpr);
         assertNotEquals("Expected non-null", null, sumExpr);
@@ -394,9 +393,9 @@ public class ExpressionTest {
         Multiplication multExpr2 = 
                 new Multiplication(new Variable("x"), new Variable("y"));
         
+        Expression product = multExpr1.multiply(multExpr2);
         Expression expected = 
                 new Multiplication(multExpr1, multExpr2);
-        Expression product = multExpr1.multiply(multExpr2);
         
         assertNotEquals("Expected non-null", null, multExpr1);
         assertNotEquals("Expected non-null", null, multExpr2);
@@ -416,8 +415,8 @@ public class ExpressionTest {
                 new Multiplication(new Variable("x"), new Variable("y"));
         Expression addition = sumExpr.add(multExpr);
         
-        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
         List<Expression> subExpr = addition.getSubExpr();
+        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
         
         assertNotEquals("Expected non-empty list",
                 Collections.emptyList(), subExpr);
@@ -436,8 +435,8 @@ public class ExpressionTest {
                 new Multiplication(new Variable("x"), new Variable("y"));
         Expression product = sumExpr.multiply(multExpr);
         
-        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
         List<Expression> subExpr = product.getSubExpr();
+        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
         
         assertNotEquals("Expected non-empty list",
                 Collections.emptyList(), subExpr);
@@ -449,6 +448,7 @@ public class ExpressionTest {
     
     // Tests for variant.toString()
     //TODO: include parse tests to check if the string is parsable
+    // e.equals(Expression.parse(e.toString()))
     @Test
     // covers value
     public void testToString_Value() {
@@ -474,8 +474,8 @@ public class ExpressionTest {
                 new Multiplication(new Variable("x"), new Variable("y"));
         Expression addition = sumExpr.add(multExpr);
         
-        String expected = "x + 2 + x*y";
         String sumString = addition.toString();
+        String expected = "x + 2 + x*y";
         
         assertEquals("Expected correct string rep",
                 expected, sumString);
@@ -490,8 +490,8 @@ public class ExpressionTest {
         Expression multExpr =
                 new Multiplication(leftSumExpr, rightSumExpr);
         
-        String expected = "(x + 2)*(x + y)";
         String multString = multExpr.toString();
+        String expected = "(x + 2)*(x + y)";
         
         assertEquals("Expected correct string rep",
                 expected, multString);
@@ -559,6 +559,7 @@ public class ExpressionTest {
         // x + x*y != x*y + x
         // 1 + 2.0 != 2 + 1
         // x + x*y != (x + x)*y
+        // (x + y) + x == x + (y + x)
         Variable x = new Variable("x");
         Variable y = new Variable("y");
         Multiplication mult1 = 
@@ -579,6 +580,10 @@ public class ExpressionTest {
                 new Addition(new Value("1"), new Value("2.0"));// 1 + 2.0
         Addition add6 =
                 new Addition(new Value("2"), new Value("1"));// 2 + 1
+        Addition add7 = new Addition(
+                new Addition(x, y), x);// (x + y) + x
+        Addition add8 = new Addition(
+                x, new Addition(y, x));// x + (y + x)
         
         assertTrue("Expected reflexive equality", 
                 add1.equals(add1));
@@ -592,6 +597,8 @@ public class ExpressionTest {
                 add5.equals(add6));
         assertFalse("Expected equal sums to have same grouping", 
                 add1.equals(mult3));
+        assertTrue("Expected sums with same meaning to be equal",
+                add7.equals(add8));
     }
     @Test
     // covers multiplication
@@ -601,6 +608,7 @@ public class ExpressionTest {
         // x*(x + y) != (x + y)*x
         // 1*2.0 != 2*1
         // x*(x + y) != x*x + y
+        // x*x*(y) == x*(x*y)
         Variable x = new Variable("x");
         Variable y = new Variable("y");
         Addition add1 = 
@@ -621,6 +629,14 @@ public class ExpressionTest {
                 new Multiplication(new Value("1"), new Value("2.0"));// 1*2.0
         Multiplication mult6 =
                 new Multiplication(new Value("2"), new Value("1"));// 2*1
+        Multiplication mult7 =
+                new Multiplication(
+                        new Multiplication(x, x),
+                        y); // x*x*(y)
+        Multiplication mult8 =
+                new Multiplication(
+                        x,
+                        new Multiplication(x, y)); // x*(x*y)
         
         assertTrue("Expected reflexive equality", 
                 mult1.equals(mult1));
@@ -634,6 +650,8 @@ public class ExpressionTest {
                 mult5.equals(mult6));
         assertFalse("Expected equal products to have same grouping", 
                 mult1.equals(add3));
+        assertTrue("Expected products with same meaning to be equal", 
+                mult7.equals(mult8));
     }
     
     // Tests for variant.hashCode()
@@ -693,4 +711,37 @@ public class ExpressionTest {
                 mult1.hashCode(), mult2.hashCode());
     }
     
+    // Tests for variant.isAddition()
+    @Test
+    // covers value
+    public void testIsAddition_Value() {
+        Value valueExpr = new Value("3.142");
+        
+        assertFalse("Expected value not to be an addition", 
+                valueExpr.isAddition());
+    }
+    @Test
+    // covers variable
+    public void testIsAddition_Variable() {
+        Variable varExpr = new Variable("foo");
+        
+        assertFalse("Expected variable not to be an addition", 
+                varExpr.isAddition());
+    }
+    @Test
+    // covers addition
+    public void testIsAddition_Addition() {
+        Addition addExpr = new Addition(new Variable("x"), new Value("0"));
+        
+        assertTrue("Expected addition to be an addition", 
+                addExpr.isAddition());
+    }  
+    @Test
+    // covers multiplication
+    public void testIsAddition_Multiplication() {
+        Multiplication multExpr = new Multiplication(new Value("0.24"), new Value("0.13"));
+        
+        assertTrue("Expected multiplication not to be an addition", 
+                multExpr.isAddition());
+    }  
 }
