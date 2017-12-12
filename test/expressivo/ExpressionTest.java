@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
-// TODO: include tests for variant.isAddition()
 /**
  * Tests for the concrete variants of Expression
  */
@@ -447,8 +446,6 @@ public class ExpressionTest {
     }
     
     // Tests for variant.toString()
-    //TODO: include parse tests to check if the string is parsable
-    // e.equals(Expression.parse(e.toString()))
     @Test
     // covers value
     public void testToString_Value() {
@@ -456,6 +453,8 @@ public class ExpressionTest {
         
         assertEquals("Expected correct string rep", 
                 "2.2", valueExpr.toString());
+        assertEquals("Expected parsable string rep", 
+                valueExpr, Expression.parse(valueExpr.toString()));
     }
     @Test
     // covers variable
@@ -464,6 +463,8 @@ public class ExpressionTest {
         
         assertEquals("Expected correct string rep", 
                 "Foo", varExpr.toString());
+        assertEquals("Expected parsable string rep", 
+                varExpr, Expression.parse(varExpr.toString()));
     }
     @Test
     // covers addition
@@ -479,6 +480,8 @@ public class ExpressionTest {
         
         assertEquals("Expected correct string rep",
                 expected, sumString);
+        assertEquals("Expected parsable string rep", 
+                addition, Expression.parse(addition.toString()));
     }
     @Test
     // covers multiplication
@@ -495,6 +498,8 @@ public class ExpressionTest {
         
         assertEquals("Expected correct string rep",
                 expected, multString);
+        assertEquals("Expected parsable string rep", 
+                multExpr, Expression.parse(multExpr.toString()));
     }
 
     // Tests for variant.equals(variant)
