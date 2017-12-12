@@ -4,10 +4,6 @@
 package expressivo;
 
 import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Test;
 /**
  * Tests for the concrete variants of Expression
@@ -30,9 +26,6 @@ public class ExpressionTest {
     //      this variant included as otherVariant  
     //    variant.multiply(otherVariant)
     //      this variant included as otherVariant
-    //    variant.getSubExpr()
-    //      - Addition
-    //      - Multiplication
     //    variant.toString()
     //      include parse tests to make sure the string is parsable
     //    variant.equals(variant)
@@ -40,6 +33,7 @@ public class ExpressionTest {
     //      - symmetric
     //      - transitive
     //    variant.hashCode()
+    //    variant.isAddition()
     // Full Cartesian Coverage of partitions
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
@@ -401,48 +395,6 @@ public class ExpressionTest {
         assertNotEquals("Expected non-null", null, expected);
         assertEquals("Expected product expression", 
                 expected, product);
-    }
-    
-    // Tests for variant.getSubExpr()
-    @Test
-    // covers addition
-    public void testGetSubExpr_Addition() {
-        // (x + 2) + (x*y)
-        Addition sumExpr = 
-                new Addition(new Variable("x"), new Value("2"));
-        Multiplication multExpr = 
-                new Multiplication(new Variable("x"), new Variable("y"));
-        Expression addition = sumExpr.add(multExpr);
-        
-        List<Expression> subExpr = addition.getSubExpr();
-        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
-        
-        assertNotEquals("Expected non-empty list",
-                Collections.emptyList(), subExpr);
-        assertEquals("Expected doubleton list",
-                2, subExpr.size());
-        assertEquals("Expected correct operands",
-                expected, subExpr);
-    }
-    @Test
-    // covers multiplication
-    public void testGetSubExpr_Mult() {
-        // (x + 2)*(x*y)
-        Addition sumExpr = 
-                new Addition(new Variable("x"), new Value("2"));
-        Multiplication multExpr = 
-                new Multiplication(new Variable("x"), new Variable("y"));
-        Expression product = sumExpr.multiply(multExpr);
-        
-        List<Expression> subExpr = product.getSubExpr();
-        List<Expression> expected = Arrays.asList(sumExpr, multExpr);
-        
-        assertNotEquals("Expected non-empty list",
-                Collections.emptyList(), subExpr);
-        assertEquals("Expected doubleton list",
-                2, subExpr.size());
-        assertEquals("Expected correct operands",
-                expected, subExpr);
     }
     
     // Tests for variant.toString()

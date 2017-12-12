@@ -73,22 +73,6 @@ public interface Expression {
      */
     public Expression multiply(Expression e);
     /**
-     * Returns the two subexpressions of a binary operator
-     * Addition and Multiplication expressions
-     * are treated as binary operators:
-     *      operand operator operand
-     * with the operands being expressions. For example:
-     *      x + x * y, is an addition having operands
-     *      x and x * y.
-     * or:
-     *      (x + x) * y, is a multiplication having
-     *      x + x and y as its operands
-     * @return a doubleton list of the two subexpression
-     *         operands in this expression in the order they
-     *         appear
-     */
-    public List<Expression> getSubExpr();
-    /**
      * Checks if this expression is an addition
      * @return true if this expression is an addition
      */

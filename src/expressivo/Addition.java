@@ -1,8 +1,5 @@
 package expressivo;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * An immutable type representing an addition expression
  */
@@ -38,10 +35,6 @@ public class Addition implements Expression {
 
     @Override public Expression multiply(Expression e) {
         return new Multiplication(this, e);
-    }
-
-    @Override public List<Expression> getSubExpr() {
-        return Arrays.asList(this.left, this.right);
     }
     @Override public boolean isAddition() {
         return true;

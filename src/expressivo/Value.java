@@ -1,7 +1,5 @@
 package expressivo;
 
-import java.util.List;
-
 /**
  * An immutable type representing a non-negative number in an expression
  */
@@ -37,9 +35,6 @@ public class Value implements Expression {
     }
     @Override public Expression multiply(Expression e) {
         return new Multiplication(this, e);
-    }
-    @Override public List<Expression> getSubExpr() {
-        throw new UnsupportedOperationException();
     } 
     @Override public boolean isAddition() {
         return false;

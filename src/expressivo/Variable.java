@@ -1,6 +1,5 @@
 package expressivo;
 
-import java.util.List;
 /**
  * An immutable type representing a named variable in an expression
  * Variable names are case-sensitive
@@ -36,9 +35,6 @@ public class Variable implements Expression {
     }
     @Override public Expression multiply(Expression e) {
         return new Multiplication(this, e);
-    }
-    @Override public List<Expression> getSubExpr() {
-        throw new UnsupportedOperationException();
     }
     @Override public boolean isAddition() {
         return false;
