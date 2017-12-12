@@ -746,7 +746,7 @@ public class ExpressionTest {
     public void testIsAddition_Multiplication() {
         Multiplication multExpr = new Multiplication(new Value("0.24"), new Value("0.13"));
         
-        assertTrue("Expected multiplication not to be an addition", 
+        assertFalse("Expected multiplication not to be an addition", 
                 multExpr.isAddition());
     }  
 }
