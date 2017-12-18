@@ -1,10 +1,6 @@
 package expressivo.parser;
 
-import expressivo.Addition;
 import expressivo.Expression;
-import expressivo.Multiplication;
-import expressivo.Value;
-import expressivo.Variable;
 
 public class ExpressionMainVisitor extends ExpressionBaseVisitor<Expression> {
     /** Returns the whole expression generated from the parse tree */
@@ -20,7 +16,7 @@ public class ExpressionMainVisitor extends ExpressionBaseVisitor<Expression> {
         Expression leftExpr = visit(ctx.expr(0));
         Expression rightExpr = visit(ctx.expr(1));
         
-        return new Addition(leftExpr, rightExpr);
+        return leftExpr.addExpr(rightExpr);
     }
     /** Returns the expression inside braces */
     @Override public Expression visitBrackets(ExpressionParser.BracketsContext ctx) {
@@ -31,19 +27,21 @@ public class ExpressionMainVisitor extends ExpressionBaseVisitor<Expression> {
         Expression leftExpr = visit(ctx.expr(0));
         Expression rightExpr = visit(ctx.expr(1));
         
-        return new Multiplication(leftExpr, rightExpr);
+        return leftExpr.multiplyExpr(rightExpr);
     }
     /** Creates a number on every visit */
     @Override public Expression visitNum(ExpressionParser.NumContext ctx) {
         String num = ctx.NUM().getText();
         
-        return new Value(num); 
+        Expression empty = Expression.emptyExpression();
+        return empty.addConstant(Double.parseDouble(num)); 
     }
 
     /** Creates a variable on every visit */
     @Override public Expression visitId(ExpressionParser.IdContext ctx) { 
         String id = ctx.ID().getText();
         
-        return new Variable(id);
+        Expression empty = Expression.emptyExpression();
+        return empty.addVariable(id);
     }
 }

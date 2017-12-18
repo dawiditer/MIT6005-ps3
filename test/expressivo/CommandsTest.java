@@ -5,6 +5,9 @@ package expressivo;
 
 import static org.junit.Assert.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 
 /**
@@ -13,25 +16,28 @@ import org.junit.Test;
 public class CommandsTest {
 
     // Testing strategy
-    //   Partitions for differentiate(expression, variable) -> derivative:
+    //   Partitions for differentiate: Expression x String -> Expression:
     //    expression: contains one variable,
     //              multiple variables,
     //              one operator,
     //              multiple operators.
     //     where operators are addition and multiplication
-    //     include expressions haaving groups
+    //     include expressions having groups
     //    variable: exists in expression,
     //              doesn't exist in expression
-    
+    //
+    //   Partitions for simplify: Expression x Map -> Expression
+    //     expression: contains no variable in map,
+    //              contains one variable in map,
+    //              contains all the variables in map,
+    //              contains multiple variables in map
     @Test(expected=AssertionError.class)
     public void testAssertionsEnabled() {
         assert false; // make sure assertions are enabled with VM argument: -ea
     }
     
-    
-    // TODO tests for Commands.differentiate() and Commands.simplify()
     // Tests for Command.differentiate()
-    @Test
+    @Test 
     // covers one operator, addition, 
     //        multiple variables,
     //        variable exists in expression
@@ -145,5 +151,70 @@ public class CommandsTest {
                 expectedString, outputExpr);
         assertEquals("Expected a valid expression", 
                 expectedExpr, Expression.parse(outputExpr));
+    }
+    
+    // Tests for Commands.simplify()
+    @Test
+    // covers expression contains no variable in map
+    public void testSimplify_NotExist() {
+        String expr = "m*x + c";
+        Map<String, Double> env = new HashMap<>();
+        
+        env.put("PI", 3.142);
+        env.put("radius", 12.0);
+        String actual = Commands.simplify(expr, env);
+        String expected = Expression.parse(expr).toString();
+        
+        assertNotNull("Expected non-null string expression", actual);
+        assertNotEquals("Expected non-empty string", "", actual);
+        assertEquals("Expected unchanged string", expected, actual);
+    }
+    @Test
+    // covers one variable in expression and map
+    public void testSimplify_OneVar() {
+        String expr = "PI*diameter";
+        Map<String, Double> env = new HashMap<>();
+        
+        env.put("PI", 3.142);
+        env.put("radius", 12.0); 
+        String actual = Commands.simplify(expr, env);
+        String expected = Expression.parse("3.142*diameter").toString();
+        
+        assertNotNull("Expected non-null string expression", actual);
+        assertNotEquals("Expected non-empty string", "", actual);
+        assertEquals("Expected variable substituted", expected, actual);
+    }
+    @Test
+    // covers all variables in expression are in map
+    public void testSimplify_AllVars() {
+        String expr = "PI * (radius + radius)";
+        Map<String, Double> env = new HashMap<>();
+        
+        env.put("PI", 3.142);
+        env.put("radius", 12.0); 
+        String actual = Commands.simplify(expr, env);
+        String expected = String.valueOf(3.142 * (12.0 + 12.0)); 
+        
+        assertNotNull("Expected non-null string expression", actual);
+        assertNotEquals("Expected non-empty string", "", actual);
+        assertEquals("Expected all variables substituted and simplified", 
+                expected, actual);
+    }
+    @Test
+    // covers multiple variables in both expression and map
+    public void testSimplify_MultipleVars() {
+        String expr = "0.5*length*width + PI*(length*0.5)";
+        Map<String, Double> env = new HashMap<>();
+        
+        env.put("PI", 3.142);
+        env.put("length", 4.0);
+        env.put("width", 2.0); 
+        String actual = Commands.simplify(expr, env);
+        String expected = Expression.parse("(0.5*4*2) + (3.142*4*0.5)").toString();  
+        
+        assertNotNull("Expected non-null string expression", actual);
+        assertNotEquals("Expected non-empty string", "", actual);
+        assertEquals("Expected variables substituted and simplified", 
+                expected, actual);
     }
 }
